@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theo's Pokémon Smoothie Week</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #FFD700;
+    --red: #FF3B30;
+    --blue: #1A73E8;
+    --green: #34C759;
+    --purple: #AF52DE;
+    --orange: #FF9500;
+    --pink: #FF2D78;
+    --dark: #1a1a2e;
+    --card-radius: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #ffffff;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(255,215,0,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(26,115,232,0.08) 0%, transparent 50%);
+    min-height: 100vh;
+    padding: 32px 16px 48px;
+    color: #000000;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  header .pokeball {
+    display: inline-block;
+    font-size: 52px;
+    margin-bottom: 8px;
+    animation: spin 6s linear infinite;
+  }
+
+  @keyframes spin {
+    0%,90%,100% { transform: rotate(0deg); }
+    95% { transform: rotate(360deg); }
+  }
+
+  header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(28px, 6vw, 48px);
+    background: linear-gradient(135deg, #FFD700, #FF9500, #FF3B30);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    letter-spacing: 1px;
+  }
+
+  header p {
+    margin-top: 8px;
+    color: rgba(255,255,255,0.55);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: #ffffff
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: fadeUp 0.5s ease both;
+    cursor: default;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  .card-header {
+    padding: 20px 20px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+    background: var(--accent);
+  }
+
+  .day-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: rgba(224, 224, 224, 0.3);
+    color: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+  }
+
+  .pokemon-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pokemon-emoji {
+    font-size: 46px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+    flex-shrink: 0;
+  }
+
+  .title-block { flex: 1; }
+
+  .recipe-name {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    line-height: 1.1;
+    color: #000000;
+  }
+
+  .pokemon-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .color-bar {
+    height: 4px;
+    background: var(--accent);
+    margin: 0 20px;
+    border-radius: 2px;
+    opacity: 0.7;
+  }
+
+  .card-body {
+    padding: 16px 20px 20px;
+  }
+
+  .ingredients-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+
+  .ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 14px;
+  }
+
+  .ing {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    padding: 4px 11px;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .tip {
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 9px 12px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  .tip strong { color: rgba(0, 0, 0, 0.85); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.10s; }
+  .card:nth-child(3) { animation-delay: 0.15s; }
+  .card:nth-child(4) { animation-delay: 0.20s; }
+  .card:nth-child(5) { animation-delay: 0.25s; }
+  .card:nth-child(6) { animation-delay: 0.30s; }
+  .card:nth-child(7) { animation-delay: 0.35s; }
+
+  .note-banner {
+    max-width: 1100px;
+    margin: 28px auto 0;
+    background: rgba(255,215,0,0.06);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 16px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  .note-banner strong { color: #FFD700; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pokeball"><img src="Pokedex.png" 
+  style="width:100px;height:100px;"></div>
+  <h1>Theo's Smoothie Pokédex</h1>
+  <p>Weekly Battle — 7 Days · 7 Moves</p>
+</header>
+
+<div class="grid">
+
+  <!-- MONDAY -->
+  <div class="card" style="--accent: #FF3B30;">
+    <div class="card-header">
+      <div class="day-badge">Monday</div>
+      <div class="pokemon-row">
+        <div class="pokemon-emoji">🔥</div>
+        <div class="title-block">
+          <div class="recipe-name">Growlithe's Brave Fire</div>
+          <div class="pokemon-name">Growlithe · Fire Type</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-bar"></div>
+    <div class="card-body">
+      <div class="ingredients-label">Ingredients</div>
+      <div class="ingredients">
+        <span class="ing">🍓 Frozen Strawberry ¾ cup</span>
+        <span class="ing">🥭 Frozen Mango ¼ cup</span>
+        <span class="ing">🥛 Plain Yogurt ¼ cup</span>
+        <span class="ing">🍊 Orange Juice ⅓ cup</span>
+        <span class="ing">🍯 Honey ½ tsp</span>
+      </div>
+      <div class="tip">🎯 <strong>Booster Juice copycat</strong> — tangy OJ keeps it from getting too sweet. Closest to Strawberry Storm.</div>
+    </div>
+  </div>
+
+  <!-- TUESDAY -->
+  <div class="card" style="--accent: #1A73E8;">
+    <div class="card-header">
+      <div class="day-badge">Tuesday</div>
+      <div class="pokemon-row">
+        <div class="pokemon-emoji">🌋</div>
+        <div class="title-block">
+          <div class="recipe-name">Grubbin's Pinching Head</div>
+          <div class="pokemon-name">Grubbin · Bug Type</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-bar"></div>
+    <div class="card-body">
+      <div class="ingredients-label">Ingredients</div>
+      <div class="ingredients">
+        <span class="ing">🫐 Frozen Blueberry ½ cup</span>
+        <span class="ing">🍓 Frozen Strawberry ¼ cup</span>
+        <span class="ing">🍌 Banana ½</span>
+        <span class="ing">🥛 Milk ½ cup</span>
+        <span class="ing">🥛 Plain Yogurt ¼ cup</span>
+      </div>
+      <div class="tip">🎯 <strong>Booster Juice Berry Bloom match</strong> — banana adds creaminess, no honey needed. Naturally mild sweetness.</div>
+    </div>
+  </div>
+
+  <!-- WEDNESDAY -->
+  <div class="card" style="--accent: #34C759;">
+    <div class="card-header">
+      <div class="day-badge">Wednesday</div>
+      <div class="pokemon-row">
+        <div class="pokemon-emoji">🌿</div>
+        <div class="title-block">
+          <div class="recipe-name">Mankey's Branch Blend</div>
+          <div class="pokemon-name">Mankey · Fighting Type</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-bar"></div>
+    <div class="card-body">
+      <div class="ingredients-label">Ingredients</div>
+      <div class="ingredients">
+        <span class="ing">🥑 Frozen Avocado ¼ cup</span>
+        <span class="ing">🥭 Frozen Mango ½ cup</span>
+        <span class="ing">🌿 Spinach ½ cup</span>
+        <span class="ing">🍊 Orange Juice ½ cup</span>
+        <span class="ing">🥛 Plain Yogurt ¼ cup</span>
+      </div>
+      <div class="tip">🌱 <strong>Add spinach first</strong>, blend before adding fruit. Pour into an opaque cup — the green disappears behind the mango flavour.</div>
+    </div>
+  </div>
+
+  <!-- THURSDAY -->
+  <div class="card" style="--accent: #AF52DE;">
+    <div class="card-header">
+      <div class="day-badge">Thursday</div>
+      <div class="pokemon-row">
+        <div class="pokemon-emoji">👊</div>
+        <div class="title-block">
+          <div class="recipe-name">Lucario's Punching Shake</div>
+          <div class="pokemon-name">Lucario · Fighting-Steel Type</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-bar"></div>
+    <div class="card-body">
+      <div class="ingredients-label">Ingredients</div>
+      <div class="ingredients">
+        <span class="ing">🍌 Banana ½</span>
+        <span class="ing">🫐 Frozen Blueberry ½ cup</span>
+        <span class="ing">🥜 Ground Almond 1 tbsp</span>
+        <span class="ing">🥛 Milk ½ cup</span>
+        <span class="ing">🥛 Plain Yogurt ¼ cup</span>
+        <span class="ing">🍯 Honey ½ tsp</span>
+      </div>
+      <div class="tip">⚠️ <strong>Ground almond meal only</strong> — never whole almonds (choking hazard). Tastes like a mild blueberry milkshake.</div>
+    </div>
+  </div>
+
+  <!-- FRIDAY -->
+  <div class="card" style="--accent: #FF2D78;">
+    <div class="card-header">
+      <div class="day-badge">Friday</div>
+      <div class="pokemon-row">
+        <div class="pokemon-emoji">🥑</div>
+        <div class="title-block">
+          <div class="recipe-name">Gulpin's Sticky Potion</div>
+          <div class="pokemon-name">Gulpin · Poison Type</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-bar"></div>
+    <div class="card-body">
+      <div class="ingredients-label">Ingredients</div>
+      <div class="ingredients">
+        <span class="ing">🍓 Frozen Strawberry ½ cup</span>
+        <span class="ing">🥑 Frozen Avocado ¼ cup</span>
+        <span class="ing">🌿 Spinach ½ cup</span>
+        <span class="ing">🥛 Milk ½ cup</span>
+        <span class="ing">🥛 Plain Yogurt ¼ cup</span>
+      </div>
+      <div class="tip">🩷 Avocado makes it silky-creamy. Spinach hides completely behind the strawberry colour. No honey needed — naturally balanced.</div>
+    </div>
+  </div>
+
+  <!-- SATURDAY -->
+  <div class="card" style="--accent: #FF9500;">
+    <div class="card-header">
+      <div class="day-badge">Saturday</div>
+      <div class="pokemon-row">
+        <div class="pokemon-emoji">👾</div>
+        <div class="title-block">
+          <div class="recipe-name">Guzzlord's Beast Blend</div>
+          <div class="pokemon-name">Guzzlord · Dark-Dragon Type</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-bar"></div>
+    <div class="card-body">
+      <div class="ingredients-label">Ingredients</div>
+      <div class="ingredients">
+        <span class="ing">🥭 Frozen Mango ½ cup</span>
+        <span class="ing">🫐 Frozen Blueberry ¼ cup</span>
+        <span class="ing">🥜 Ground Pecan 1 tbsp</span>
+        <span class="ing">🍊 Orange Juice ⅓ cup</span>
+        <span class="ing">🥛 Plain Yogurt ¼ cup</span>
+      </div>
+      <div class="tip">⚠️ <strong>Ground pecan meal only</strong> — pulse in a dry blender first. Toasty pecan depth cuts the sweetness of the mango perfectly.</div>
+    </div>
+  </div>
+
+  <!-- SUNDAY -->
+  <div class="card" style="--accent: #FFD700;">
+    <div class="card-header">
+      <div class="day-badge">Sunday</div>
+      <div class="pokemon-row">
+        <div class="pokemon-emoji">🪽</div>
+        <div class="title-block">
+          <div class="recipe-name">Archen's Defense Blend</div>
+          <div class="pokemon-name">Archen · Rock-Flying Type</div>
+        </div>
+      </div>
+    </div>
+    <div class="color-bar"></div>
+    <div class="card-body">
+      <div class="ingredients-label">Ingredients</div>
+      <div class="ingredients">
+        <span class="ing">🍓 Frozen Strawberry ½ cup</span>
+        <span class="ing">🫐 Frozen Blueberry ¼ cup</span>
+        <span class="ing">🥭 Frozen Mango ¼ cup</span>
+        <span class="ing">🍌 Banana ½</span>
+        <span class="ing">🥛 Milk ½ cup</span>
+        <span class="ing">🍯 Honey ½ tsp (opt.)</span>
+      </div>
+      <div class="tip">⭐ <strong>The crowd-pleaser</strong> — Theo's guaranteed win on picky days. Taste before adding honey; it's usually sweet enough without.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="note-banner">
+  🎒 <strong>Trainer Tip:</strong> Pre-pack 7 freezer bags on Sunday (all ingredients except milk/yogurt/OJ). Label each with the Pokémon name. Weekday mornings = dump bag + liquids + blend = 2 minutes. &nbsp;|&nbsp;
+  🍌 <strong>Sweetness control:</strong> Use slightly underripe banana to reduce sweetness. Honey is optional in all recipes. &nbsp;|&nbsp;
+  ⚠️ <strong>Nuts:</strong> Always ground meal only — never whole pecans or almonds for Theo.
+</div>
+
+</body>
+</html>
